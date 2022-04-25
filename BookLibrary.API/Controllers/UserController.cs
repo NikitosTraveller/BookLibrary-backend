@@ -20,7 +20,7 @@ namespace BookLibrary.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         private IMapper _mapper;
 

@@ -1,11 +1,43 @@
+using BookLibrary.BL.Contracts;
+using BookLibrary.Models;
+using BookLibrary.Services;
+
+using AutoMapper;
+using BookLibrary.Helpers;
+using BookLibrary.ViewModels;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using BookLibrary.API.Mapping;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped(typeof(IBookService), typeof(BookService));
+builder.Services.AddScoped(typeof(ICommentService), typeof(CommentService));
+builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
 var app = builder.Build();
 

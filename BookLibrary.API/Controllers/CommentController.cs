@@ -18,9 +18,9 @@ namespace BookLibrary.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private ICommentService _commentService;
+        private readonly ICommentService _commentService;
 
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         private IMapper _mapper;
 

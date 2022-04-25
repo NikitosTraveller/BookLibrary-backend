@@ -17,9 +17,9 @@ namespace BookLibrary.Controllers
     public class BookController : ControllerBase
     {
 
-        private IBookService _bookService;
+        private readonly IBookService _bookService;
 
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         private IMapper _mapper;
 
