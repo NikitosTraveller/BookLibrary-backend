@@ -1,4 +1,5 @@
 ﻿using BookLibrary.BL.Contracts;
+using BookLibrary.DAL;
 using BookLibrary.Helpers;
 using BookLibrary.Models;
 using Microsoft.Extensions.Options;
@@ -17,29 +18,38 @@ namespace BookLibrary.Services
     {
         private ApplicationContext _context;
 
-        public UserService(ApplicationContext context)
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IFinder<User> _userFinder;
+
+        private readonly IRepository<User> _userRepository;
+
+        public UserService(ApplicationContext context, IUnitOfWork unitOfWork, IFinder<User> userFinder, IRepository<User> userRepository)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
+            _userFinder = userFinder;
+            _userRepository = userRepository;
         }
 
-        public User CreateUser(User user)
+        public async Task<User> CreateUserAsync(User user)
         {
             var nonUnique =  _context.Users.SingleOrDefault(u => u.Username == user.Username);
             if(nonUnique == null)
             {
-                _context.Users.Add(user);
-                user.Id = _context.SaveChanges();
+                _userRepository.Create(user);
+                user.Id = await _unitOfWork.Commit();
                 return user;
             }
             return null;
         }
 
-        public User GetById(int userId)
+        public async Task<User> GetByIdAsync(int userId)
         {
-            return _context.Users.FirstOrDefault(user => user.Id == userId);
+            return await _userFinder.GetByIdAsync(userId);
         }
 
-        public User GetByUsername(string username)
+        public async Task<User> GetByUsernameAsync(string username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }

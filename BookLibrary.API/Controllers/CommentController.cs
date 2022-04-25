@@ -35,14 +35,14 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet("comments/{bookId}")]
-        public IActionResult GetAllCommentsForBook(int bookId)
+        public async Task<IActionResult> GetAllCommentsForBook(int bookId)
         {
-            var comments = _commentService.GetCommentsForBook(bookId);
+            var comments = await _commentService.GetCommentsForBookAsync(bookId);
             return Ok(_mapper.Map<IEnumerable<CommentViewModel>>(comments));
         }
 
         [HttpPost("post")]
-        public IActionResult PostComment(CommentModel commentViewModel)
+        public async Task<IActionResult> PostComment(CommentModel commentViewModel)
         {
             if(!ModelState.IsValid)
             {
@@ -52,14 +52,14 @@ namespace BookLibrary.Controllers
             int userId = _userService.GetUserId(Request.Cookies["jwt"], _jwtSettings.Value.Secret);
 
             var comment = _mapper.Map<Comment>(commentViewModel);
-            var postedComment = _commentService.PostComment(comment, userId);
+            var postedComment = await _commentService.PostCommentAsync(comment, userId);
             return Ok(_mapper.Map<CommentViewModel>(postedComment));
         }
 
         [HttpDelete("delete/{commentId}")]
-        public IActionResult DeleteComment(int commentId)
+        public async Task<IActionResult> DeleteComment(int commentId)
         {
-            _commentService.DeleteComment(commentId);
+            await _commentService.DeleteCommentAsync(commentId);
             return Ok(commentId);
         }
     }

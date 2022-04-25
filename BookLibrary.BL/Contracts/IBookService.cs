@@ -9,12 +9,12 @@ namespace BookLibrary.BL.Contracts
 {
     public interface IBookService
     {
-        Book UploadBook(Book book, int userid);
+        Task<Book> UploadBookAsync(Book book, int userid);
 
-        Book GetBook(int bookId);
+        Task<Book> GetBookAsync(int bookId);
 
-        void DeleteBook(int bookId);
+        Task DeleteBookAsync(int bookId);
 
-        IEnumerable<Book> GetAllBooks();
+        Task<IEnumerable<Book>> GetAllBooksAsync();
     }
 }

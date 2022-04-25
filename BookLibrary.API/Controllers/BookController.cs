@@ -34,7 +34,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("upload")]
-        public IActionResult UploadBook([FromForm] FileModel fileModel)
+        public async Task<IActionResult> UploadBook([FromForm] FileModel fileModel)
         {
 
             if (!ModelState.IsValid)
@@ -45,21 +45,21 @@ namespace BookLibrary.Controllers
             int userId = _userService.GetUserId(Request.Cookies["jwt"], _jwtSettings.Value.Secret);
 
             var book = _mapper.Map<Book>(fileModel);
-            var uploadedBook = _bookService.UploadBook(book, userId);
+            var uploadedBook = await _bookService.UploadBookAsync(book, userId);
             return Ok(_mapper.Map<BookViewModel>(uploadedBook));
         }
 
         [HttpGet("books")]
-        public IActionResult GetAllBooks()
+        public async Task<IActionResult> GetAllBooks()
         {
-            var books = _bookService.GetAllBooks();
+            var books = await _bookService.GetAllBooksAsync();
             return Ok(_mapper.Map<IEnumerable<BookViewModel>>(books));
         }
 
         [HttpGet("books/{bookId}")]
-        public IActionResult GetBook(int bookId)
+        public async Task<IActionResult> GetBook(int bookId)
         {
-            var book = _bookService.GetBook(bookId);
+            var book = await _bookService.GetBookAsync(bookId);
 
             if(book == null)
             {
@@ -70,9 +70,9 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("download/{bookId}")]
-        public IActionResult DownloadBook(int bookId)
+        public async Task<IActionResult> DownloadBook(int bookId)
         {
-            var book = _bookService.GetBook(bookId);
+            var book = await _bookService.GetBookAsync(bookId);
 
             if(book == null)
             {
@@ -83,9 +83,9 @@ namespace BookLibrary.Controllers
         }
 
         [HttpDelete("delete/{bookId}")]
-        public IActionResult DeleteBook(int bookId)
+        public async Task<IActionResult> DeleteBook(int bookId)
         {
-            _bookService.DeleteBook(bookId);
+            await _bookService.DeleteBookAsync(bookId);
             return Ok(bookId);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using BookLibrary.BL.Contracts;
+using BookLibrary.DAL;
 using BookLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,32 +14,43 @@ namespace BookLibrary.Services
 
         private ApplicationContext _context;
 
-        public BookService(ApplicationContext context)
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IFinder<Book> _bookFinder;
+
+        private readonly IRepository<Book> _bookRepository;
+
+        public BookService(ApplicationContext context, IUnitOfWork unitOfWork, IFinder<Book> bookFinder, IRepository<Book> bookRepository)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
+            _bookFinder = bookFinder;
+            _bookRepository = bookRepository;
         }
 
-        public void DeleteBook(int bookId)
+        public async Task DeleteBookAsync(int bookId)
         {
-            var book = _context.Books.FirstOrDefault(book => book.Id == bookId);
+            var book = await _bookFinder.GetByIdAsync(bookId);
             if (book != null)
             {
-                _context.Books.Remove(book);
-                _context.SaveChanges();
+                _bookRepository.Delete(book);
+                await _unitOfWork.Commit();
             }
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return _context.Books.Include(book => book.Comments).Include(book => book.User).ToList();
+            return await _bookFinder.GetListAsync(null,
+                includes: _ => _.Include(c => c.Comments).Include(c => c.User),
+                disableTracking: false);
         }
 
-        public Book GetBook(int bookId)
+        public async Task<Book> GetBookAsync(int bookId)
         {
-            return _context.Books.FirstOrDefault(book => book.Id == bookId);
+            return await _bookFinder.GetByIdAsync(bookId);
         }
 
-        public Book UploadBook(Book book, int userId)
+        public async Task<Book> UploadBookAsync(Book book, int userId)
         {
             if (book.FormFile != null && book.FormFile.Length > 0)
             {
@@ -50,9 +62,9 @@ namespace BookLibrary.Services
                 }
 
                 book.UserId = userId;
-                _context.Books.Add(book);
-                _context.SaveChanges();
-                return _context.Books.OrderByDescending(book => book.Date).Include(book => book.User).FirstOrDefault();
+                _bookRepository.Create(book);
+                await _unitOfWork.Commit();
+                return await _context.Books.OrderByDescending(book => book.Date).Include(book => book.User).FirstOrDefault();
 
             }
 

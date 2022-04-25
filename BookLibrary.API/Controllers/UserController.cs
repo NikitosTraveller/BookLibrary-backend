@@ -34,10 +34,10 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(AuthenticateRequest model)
+        public async Task<IActionResult> Login(AuthenticateRequest model)
         {
 
-            var user = _userService.GetByUsername(model.Username);
+            var user = await _userService.GetByUsernameAsync(model.Username);
 
             if(user == null || !_userService.ValidatePassword(user.Password, model.Password))
             {
@@ -54,7 +54,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Registrate(UserViewModel userViewModel)
+        public async Task<IActionResult> Registrate(UserViewModel userViewModel)
         {
 
             if(!ModelState.IsValid)
@@ -62,7 +62,7 @@ namespace BookLibrary.Controllers
                 return BadRequest(new { message = "Model state is invalid." });
             }
 
-            var result = _userService.CreateUser(_mapper.Map<User>(userViewModel));
+            var result = await _userService.CreateUserAsync(_mapper.Map<User>(userViewModel));
 
             if(result == null)
             {
@@ -73,7 +73,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult GetUser()
+        public async Task<IActionResult> GetUser()
         {
             try
             {
@@ -83,7 +83,7 @@ namespace BookLibrary.Controllers
 
                 int userId = int.Parse(validatedToken.Issuer);
 
-                var user = _userService.GetById(userId);
+                var user = await _userService.GetByIdAsync(userId);
 
                 return Ok(user);
             }

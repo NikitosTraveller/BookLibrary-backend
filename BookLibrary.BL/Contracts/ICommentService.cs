@@ -9,10 +9,10 @@ namespace BookLibrary.BL.Contracts
 {
     public interface ICommentService
     {
-        IEnumerable<Comment> GetCommentsForBook(int bookId);
+        Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId);
 
-        void DeleteComment(int commentId);
+        Task DeleteCommentAsync(int commentId);
 
-        Comment PostComment(Comment comment, int userId);
+        Task<Comment> PostCommentAsync(Comment comment, int userId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BookLibrary.BL.Contracts;
+using BookLibrary.DAL;
 using BookLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,39 +14,54 @@ namespace BookLibrary.Services
 
         private ApplicationContext _context;
 
-        private IBookService _bookService;
+        private readonly IBookService _bookService;
 
-        public CommentService(ApplicationContext context, IBookService bookService)
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IFinder<Comment> _commentFinder;
+
+        private readonly IFinder<Book> _bookFinder;
+
+        private readonly IRepository<Comment> _commentRepository;
+
+        public CommentService(ApplicationContext context, IBookService bookService, IUnitOfWork unitOfWork, IFinder<Comment> commentFinder, IFinder<Book> bookFinder, IRepository<Comment> commentRepository)
         {
             _context = context;
             _bookService = bookService;
+            _unitOfWork = unitOfWork;
+            _commentFinder = commentFinder;
+            _bookFinder = bookFinder;
+            _commentRepository = commentRepository;
         }
 
-        public void DeleteComment(int commentId)
+        public async Task DeleteCommentAsync(int commentId)
         {
             var comment = _context.Comments.FirstOrDefault(comm => comm.Id == commentId);
             if(comment != null)
             {
-                _context.Comments.Remove(comment);
-                _context.SaveChanges();
+
+                _commentRepository.Delete(comment);
+                await _unitOfWork.Commit();
             }
         }
 
-        public IEnumerable<Comment> GetCommentsForBook(int bookId)
+        public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return _context.Comments.Where(comm => comm.BookId == bookId).Include(c => c.User);
+            return await _commentFinder.GetListAsync(_ => _.BookId == bookId,
+                includes: _ => _.Include(c => c.User),
+                disableTracking: false);
         }
 
-        public Comment PostComment(Comment comment, int userId)
+        public async Task<Comment> PostCommentAsync(Comment comment, int userId)
         {
-            var book = _bookService.GetBook(comment.BookId);
+            var book = await _bookFinder.GetByIdAsync(comment.BookId);
 
             if(book != null)
             {
                 comment.Book = book;
-                _context.Comments.Add(comment);
+                _commentRepository.Create(comment);
                 comment.UserId = userId;
-                _context.SaveChanges();
+                await _unitOfWork.Commit();
                 return _context.Comments.OrderByDescending(p => p.Date).Include(c => c.User).FirstOrDefault();
             }
 

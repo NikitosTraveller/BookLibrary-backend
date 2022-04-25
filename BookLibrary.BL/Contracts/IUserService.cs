@@ -9,11 +9,11 @@ namespace BookLibrary.BL.Contracts
 {
     public interface IUserService
     {
-        User CreateUser(User user);
+        Task<User> CreateUserAsync(User user);
 
-        User GetByUsername(string username);
+        Task<User> GetByUsernameAsync(string username);
 
-        User GetById(int userId);
+        Task<User> GetByIdAsync(int userId);
 
         int GetUserId(string jwt, string secret);
 
