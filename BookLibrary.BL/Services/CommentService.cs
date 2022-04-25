@@ -11,9 +11,6 @@ namespace BookLibrary.Services
 {
     public class CommentService : ICommentService
     {
-
-        private ApplicationContext _context;
-
         private readonly IBookService _bookService;
 
         private readonly IUnitOfWork _unitOfWork;
@@ -24,9 +21,8 @@ namespace BookLibrary.Services
 
         private readonly IRepository<Comment> _commentRepository;
 
-        public CommentService(ApplicationContext context, IBookService bookService, IUnitOfWork unitOfWork, IFinder<Comment> commentFinder, IFinder<Book> bookFinder, IRepository<Comment> commentRepository)
+        public CommentService(IBookService bookService, IUnitOfWork unitOfWork, IFinder<Comment> commentFinder, IFinder<Book> bookFinder, IRepository<Comment> commentRepository)
         {
-            _context = context;
             _bookService = bookService;
             _unitOfWork = unitOfWork;
             _commentFinder = commentFinder;
@@ -36,7 +32,8 @@ namespace BookLibrary.Services
 
         public async Task DeleteCommentAsync(int commentId)
         {
-            var comment = _context.Comments.FirstOrDefault(comm => comm.Id == commentId);
+            var comment = await _commentFinder.GetByIdAsync(commentId);
+
             if(comment != null)
             {
 
@@ -48,8 +45,7 @@ namespace BookLibrary.Services
         public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
         {
             return await _commentFinder.GetListAsync(_ => _.BookId == bookId,
-                includes: _ => _.Include(c => c.User),
-                disableTracking: false);
+                includes: _ => _.Include(c => c.User));
         }
 
         public async Task<Comment> PostCommentAsync(Comment comment, int userId)
@@ -61,8 +57,8 @@ namespace BookLibrary.Services
                 comment.Book = book;
                 _commentRepository.Create(comment);
                 comment.UserId = userId;
-                await _unitOfWork.Commit();
-                return _context.Comments.OrderByDescending(p => p.Date).Include(c => c.User).FirstOrDefault();
+                int commentId = await _unitOfWork.Commit();
+                return await _commentFinder.GetFirstOrDefaultAsync(_ => _.Id == commentId, includes: _ => _.Include(c => c.User));
             }
 
             return null;

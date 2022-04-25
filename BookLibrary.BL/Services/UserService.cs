@@ -16,17 +16,14 @@ namespace BookLibrary.Services
 {
     public class UserService : IUserService
     {
-        private ApplicationContext _context;
-
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IFinder<User> _userFinder;
 
         private readonly IRepository<User> _userRepository;
 
-        public UserService(ApplicationContext context, IUnitOfWork unitOfWork, IFinder<User> userFinder, IRepository<User> userRepository)
+        public UserService(IUnitOfWork unitOfWork, IFinder<User> userFinder, IRepository<User> userRepository)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
             _userFinder = userFinder;
             _userRepository = userRepository;
@@ -34,7 +31,7 @@ namespace BookLibrary.Services
 
         public async Task<User> CreateUserAsync(User user)
         {
-            var nonUnique =  _context.Users.SingleOrDefault(u => u.Username == user.Username);
+            var nonUnique = await GetByUsernameAsync(user.Username);
             if(nonUnique == null)
             {
                 _userRepository.Create(user);
@@ -51,7 +48,7 @@ namespace BookLibrary.Services
 
         public async Task<User> GetByUsernameAsync(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username);
+            return await _userFinder.GetFirstOrDefaultAsync(_ => string.Equals(_.Username, username, StringComparison.OrdinalIgnoreCase));
         }
 
         public int GetUserId(string jwt, string secret)

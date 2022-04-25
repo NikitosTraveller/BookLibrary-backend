@@ -11,18 +11,14 @@ namespace BookLibrary.Services
 {
     public class BookService : IBookService
     {
-
-        private ApplicationContext _context;
-
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IFinder<Book> _bookFinder;
 
         private readonly IRepository<Book> _bookRepository;
 
-        public BookService(ApplicationContext context, IUnitOfWork unitOfWork, IFinder<Book> bookFinder, IRepository<Book> bookRepository)
+        public BookService(IUnitOfWork unitOfWork, IFinder<Book> bookFinder, IRepository<Book> bookRepository)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
             _bookFinder = bookFinder;
             _bookRepository = bookRepository;
@@ -41,8 +37,7 @@ namespace BookLibrary.Services
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
             return await _bookFinder.GetListAsync(null,
-                includes: _ => _.Include(c => c.Comments).Include(c => c.User),
-                disableTracking: false);
+                includes: _ => _.Include(c => c.Comments).Include(c => c.User));
         }
 
         public async Task<Book> GetBookAsync(int bookId)
@@ -63,9 +58,8 @@ namespace BookLibrary.Services
 
                 book.UserId = userId;
                 _bookRepository.Create(book);
-                await _unitOfWork.Commit();
-                return await _context.Books.OrderByDescending(book => book.Date).Include(book => book.User).FirstOrDefault();
-
+                int bookId = await _unitOfWork.Commit();
+                return await _bookFinder.GetFirstOrDefaultAsync(_ => _.Id == bookId, includes: _ => _.Include(c => c.User));
             }
 
             return null;

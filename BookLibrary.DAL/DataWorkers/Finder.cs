@@ -27,18 +27,25 @@ namespace BookLibrary.DAL
 
         public async Task<IEnumerable<T>> GetListAsync(
             Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null,
-            bool disableTracking = false)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
-            var query = BuildQuery(filter, includes, null, disableTracking);
+            var query = BuildQuery(filter, includes);
             return await query.ToListAsync();
         }
 
+        public async Task<T> GetFirstOrDefaultAsync(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        {
+            var query = BuildQuery(filter);
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+
         private IQueryable<T> BuildQuery(
             Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null,
-            IBaseSearchOptions baseSearchOptions = null,
-            bool disableTracking = false)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> query = this._entities;
 
@@ -50,17 +57,6 @@ namespace BookLibrary.DAL
             if (includes != null)
             {
                 query = includes(query);
-            }
-
-            if (baseSearchOptions != null)
-            {
-                query = SetOrderBy(query, baseSearchOptions);
-                query = SetPaging(query, baseSearchOptions);
-            }
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
             }
 
             return query;

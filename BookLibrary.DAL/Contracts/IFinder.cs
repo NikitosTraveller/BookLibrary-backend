@@ -14,7 +14,10 @@ namespace BookLibrary.DAL
 
         public Task<IEnumerable<T>> GetListAsync(
             Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null,
-            bool disableTracking = false);
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
+
+        public Task<T> GetFirstOrDefaultAsync(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
     }
 }
