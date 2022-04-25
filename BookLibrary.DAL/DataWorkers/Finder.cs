@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL
+namespace BookLibrary.DAL.DataWorkers
 {
     public class Finder<T> : IFinder<T> where T : class
     {

@@ -10,6 +10,5 @@ namespace BookLibrary.DAL
     {
         void Create(T entity);
         void Delete(T entity);
-        void Save(T entity);
     }
 }

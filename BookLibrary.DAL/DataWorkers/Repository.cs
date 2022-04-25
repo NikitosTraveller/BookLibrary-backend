@@ -20,17 +20,12 @@ namespace BookLibrary.DAL.DataWorkers
 
         public void Create(T entity)
         {
-            throw new NotImplementedException();
+            _entities.Add(entity);
         }
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Save(T entity)
-        {
-            throw new NotImplementedException();
+            _entities.Remove(entity);
         }
     }
 }
