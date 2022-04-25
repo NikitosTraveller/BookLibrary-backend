@@ -3,14 +3,7 @@ using BookLibrary.Models;
 using BookLibrary.Services;
 
 using AutoMapper;
-using BookLibrary.Helpers;
-using BookLibrary.ViewModels;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using BookLibrary.API.Mapping;
 using FluentValidation.AspNetCore;
 
@@ -30,7 +23,7 @@ IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -42,7 +35,6 @@ builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
