@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using BookLibrary.BL.Contracts;
-using BookLibrary.Helpers;
 using BookLibrary.Models;
-using BookLibrary.Services;
 using BookLibrary.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Net.Mime;
 
 namespace BookLibrary.Controllers
 {

@@ -6,6 +6,11 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using BookLibrary.API.Mapping;
 using FluentValidation.AspNetCore;
+using BookLibrary.DAL;
+using BookLibrary.DAL.DataWorkers;
+using Autofac.Extensions.DependencyInjection;
+using BookLibrary.BL;
+using Autofac;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,14 +29,28 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
 
+builder.Services.AddAutofac();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddFluentValidation();
 
-builder.Services.AddScoped(typeof(IBookService), typeof(BookService));
-builder.Services.AddScoped(typeof(ICommentService), typeof(CommentService));
-builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+builder.Services.AddScoped(typeof(IFinder<>), typeof(Finder<>));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new RegisterModules());
+});
 
 var app = builder.Build();
 

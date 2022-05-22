@@ -2,17 +2,9 @@
 using BookLibrary.BL.Contracts;
 using BookLibrary.Helpers;
 using BookLibrary.Models;
-using BookLibrary.Services;
 using BookLibrary.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace BookLibrary.Controllers
 {
