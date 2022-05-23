@@ -16,13 +16,13 @@ namespace BookLibrary.Controllers
 
         private IMapper _mapper;
 
-        private IOptions<AppSettings> _jwtSettings;
+        private AppSettings _appSettings;
 
-        public UserController(IUserService userService, IOptions<AppSettings> jwtSettings, IMapper mapper)
+        public UserController(IUserService userService, IOptions<AppSettings> appSettings, IMapper mapper)
         {
             _userService = userService;
             _mapper = mapper;
-            _jwtSettings = jwtSettings;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("login")]
@@ -36,7 +36,7 @@ namespace BookLibrary.Controllers
                 return BadRequest(new { message = "Invalid credentials" });
             }
 
-            var jwt = JwtHelper.Generate(user.Id, _jwtSettings.Value.Secret, _jwtSettings.Value.LifeTime);
+            var jwt = JwtHelper.Generate(user.Id, _appSettings.Secret, _appSettings.LifeTime);
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions { 
                 HttpOnly = true
@@ -71,7 +71,7 @@ namespace BookLibrary.Controllers
             {
                 var jwt = Request.Cookies["jwt"];
 
-                var validatedToken = JwtHelper.Verify(jwt, _jwtSettings.Value.Secret);
+                var validatedToken = JwtHelper.Verify(jwt, _appSettings.Secret);
 
                 int userId = int.Parse(validatedToken.Issuer);
 

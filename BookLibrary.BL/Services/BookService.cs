@@ -46,7 +46,7 @@ namespace BookLibrary.Services
             return await _bookFinder.GetByIdAsync(bookId);
         }
 
-        public async Task<Book> UploadBookAsync(Book book, int userId)
+        public async Task<Book> UploadBookAsync(Book book, string uploadPath, int userId)
         {
             if (book.FormFile != null && book.FormFile.Length > 0)
             {

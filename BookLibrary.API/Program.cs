@@ -25,6 +25,8 @@ var mappingConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new MappingProfile());
 });
 
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 

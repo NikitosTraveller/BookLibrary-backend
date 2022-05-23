@@ -19,13 +19,13 @@ namespace BookLibrary.Controllers
 
         private IMapper _mapper;
 
-        private IOptions<AppSettings> _jwtSettings;
+        private AppSettings _appSettings;
 
-        public BookController(IBookService bookService, IOptions<AppSettings> jwtSettings, IMapper mapper, IUserService userService)
+        public BookController(IBookService bookService, IOptions<AppSettings> appSettings, IMapper mapper, IUserService userService)
         {
             _bookService = bookService;
             _mapper = mapper;
-            _jwtSettings = jwtSettings;
+            _appSettings = appSettings.Value;
             _userService = userService;
         }
 
@@ -38,10 +38,10 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = _userService.GetUserId(Request.Cookies["jwt"], _jwtSettings.Value.Secret);
+            int userId = 1; // _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
             var book = _mapper.Map<Book>(fileModel);
-            var uploadedBook = await _bookService.UploadBookAsync(book, userId);
+            var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
             return Ok(_mapper.Map<BookViewModel>(uploadedBook));
         }
 

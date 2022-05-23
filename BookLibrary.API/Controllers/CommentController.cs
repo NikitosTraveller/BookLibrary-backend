@@ -18,13 +18,13 @@ namespace BookLibrary.Controllers
 
         private IMapper _mapper;
 
-        private IOptions<AppSettings> _jwtSettings;
+        private AppSettings _appSettings;
 
-        public CommentController(ICommentService commentService, IOptions<AppSettings> jwtSettings, IMapper mapper, IUserService userService)
+        public CommentController(ICommentService commentService, IOptions<AppSettings> appSettings, IMapper mapper, IUserService userService)
         {
             _commentService = commentService;
             _mapper = mapper;
-            _jwtSettings = jwtSettings;
+            _appSettings = appSettings.Value;
             _userService = userService;
         }
 
@@ -43,7 +43,7 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = _userService.GetUserId(Request.Cookies["jwt"], _jwtSettings.Value.Secret);
+            int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
             var comment = _mapper.Map<Comment>(commentViewModel);
             var postedComment = await _commentService.PostCommentAsync(comment, userId);

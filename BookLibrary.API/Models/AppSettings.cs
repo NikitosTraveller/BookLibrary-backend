@@ -10,5 +10,7 @@ namespace BookLibrary.Models
         public string Secret { get; set; }
 
         public int LifeTime { get; set; }
+
+        public string StoragePath { get; set; }
     }
 }
