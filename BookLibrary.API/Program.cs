@@ -11,6 +11,7 @@ using BookLibrary.DAL.DataWorkers;
 using Autofac.Extensions.DependencyInjection;
 using BookLibrary.BL;
 using Autofac;
+using BookLibrary.DAL.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
