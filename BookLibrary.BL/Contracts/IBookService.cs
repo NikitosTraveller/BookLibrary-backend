@@ -13,6 +13,8 @@ namespace BookLibrary.BL.Contracts
 
         Book? GetBook(int bookId);
 
+        byte[] GetBookContent(string name, string uploadPath);
+
         Task DeleteBookAsync(int bookId);
 
         Task<IEnumerable<Book>> GetAllBooksAsync();

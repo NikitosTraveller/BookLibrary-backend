@@ -13,6 +13,8 @@ namespace BookLibrary.Models
 
         public DateTime Date { get; set; }
 
+        public string ContentType { get; set; }
+
         [NotMapped]
         public IFormFile FormFile { get; set; }
 

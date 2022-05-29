@@ -38,7 +38,7 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = 2; // _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
+            int userId = 1; // _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
             var book = _mapper.Map<Book>(fileModel);
             var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
@@ -75,7 +75,9 @@ namespace BookLibrary.Controllers
                 return NotFound();
             }
 
-            return Ok(); // return new FileContentResult(book.Content, book.ContentType);
+            var content = _bookService.GetBookContent(book.Name, _appSettings.StoragePath);
+
+            return new FileContentResult(content, book.ContentType);
         }
 
         [HttpDelete("delete/{bookId}")]

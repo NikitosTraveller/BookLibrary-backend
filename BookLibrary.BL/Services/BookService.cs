@@ -45,6 +45,16 @@ namespace BookLibrary.Services
             return _bookFinder.GetById(bookId);
         }
 
+        public byte[] GetBookContent(string name, string uploadPath)
+        {
+            string filePath = Path.Combine(uploadPath, name);
+            if (File.Exists(filePath))
+            {
+                return File.ReadAllBytes(filePath);
+            }
+            throw new NotImplementedException();
+        }
+
         public async Task<Book?> UploadBookAsync(Book book, string uploadPath, int userId)
         {
             if (book.FormFile != null && book.FormFile.Length > 0)
@@ -57,6 +67,7 @@ namespace BookLibrary.Services
                     book.FormFile.CopyTo(fileStream);
                 }
 
+                book.ContentType = book.FormFile.ContentType;
                 book.UserId = userId;
                 _bookRepository.Create(book);
                 await _unitOfWork.Commit();
