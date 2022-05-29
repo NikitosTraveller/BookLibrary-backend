@@ -36,7 +36,7 @@ namespace BookLibrary.Services
             if(nonUnique == null)
             {
                 _userRepository.Create(user);
-                user.Id = await _unitOfWork.Commit();
+                await _unitOfWork.Commit();
                 return user;
             }
             return null;

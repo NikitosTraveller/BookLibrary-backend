@@ -58,8 +58,8 @@ namespace BookLibrary.Services
 
                 book.UserId = userId;
                 _bookRepository.Create(book);
-                int bookId = await _unitOfWork.Commit();
-                return _bookFinder.Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == bookId);
+                await _unitOfWork.Commit();
+                return _bookFinder.Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == book.Id);
             }
 
             return null;
