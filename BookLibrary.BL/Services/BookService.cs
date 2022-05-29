@@ -49,11 +49,12 @@ namespace BookLibrary.Services
         {
             if (book.FormFile != null && book.FormFile.Length > 0)
             {
-                using (var ms = new MemoryStream())
+
+                Directory.CreateDirectory(uploadPath);
+                string filePath = Path.Combine(uploadPath, book.Name);
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
-                    book.FormFile.CopyTo(ms);
-                    book.Content = ms.ToArray();
-                    book.ContentType = book.FormFile.ContentType;
+                    book.FormFile.CopyTo(fileStream);
                 }
 
                 book.UserId = userId;
