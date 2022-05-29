@@ -26,10 +26,10 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(AuthenticateRequest model)
+        public IActionResult Login(AuthenticateRequest model)
         {
 
-            var user = await _userService.GetByUsernameAsync(model.Username);
+            var user = _userService.GetByUsername(model.Username);
 
             if(user == null || !_userService.ValidatePassword(user.Password, model.Password))
             {
@@ -65,7 +65,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet("user")]
-        public async Task<IActionResult> GetUser()
+        public IActionResult GetUser()
         {
             try
             {
@@ -75,7 +75,7 @@ namespace BookLibrary.Controllers
 
                 int userId = int.Parse(validatedToken.Issuer);
 
-                var user = await _userService.GetByIdAsync(userId);
+                var user = _userService.GetById(userId);
 
                 return Ok(user);
             }

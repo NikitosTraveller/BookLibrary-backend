@@ -16,50 +16,23 @@ namespace BookLibrary.DAL.DataWorkers
 
         public Finder(DbContext context)
         {
-            this._entities = (DbSet<T>)context.Set<T>();
+            this._entities = context.Set<T>();
             _dbContext = context;
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<IEnumerable<T>> GetListAsync()
         {
-            return await _entities.FindAsync(id);
+            return await _entities.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetListAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        public DbSet<T> Entities
         {
-            var query = BuildQuery(filter, includes);
-            return await query.ToListAsync();
+            get { return _entities; }
         }
 
-        public async Task<T> GetFirstOrDefaultAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        public T? GetById(int id)
         {
-            var query = BuildQuery(filter);
-            return await query.FirstOrDefaultAsync();
-        }
-
-
-
-        private IQueryable<T> BuildQuery(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
-        {
-            IQueryable<T> query = this._entities;
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (includes != null)
-            {
-                query = includes(query);
-            }
-
-            return query;
+            return _entities.Find(id);
         }
     }
 }

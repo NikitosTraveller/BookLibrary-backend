@@ -32,7 +32,7 @@ namespace BookLibrary.Services
 
         public async Task<User> CreateUserAsync(User user)
         {
-            var nonUnique = await GetByUsernameAsync(user.Username);
+            var nonUnique = GetByUsername(user.Username);
             if(nonUnique == null)
             {
                 _userRepository.Create(user);
@@ -42,14 +42,14 @@ namespace BookLibrary.Services
             return null;
         }
 
-        public async Task<User> GetByIdAsync(int userId)
+        public User? GetById(int userId)
         {
-            return await _userFinder.GetByIdAsync(userId);
+            return _userFinder.GetById(userId);
         }
 
-        public async Task<User> GetByUsernameAsync(string username)
+        public User? GetByUsername(string username)
         {
-            return await _userFinder.GetFirstOrDefaultAsync(_ => string.Equals(_.Username, username, StringComparison.OrdinalIgnoreCase));
+            return _userFinder.Entities.FirstOrDefault(_ => string.Equals(_.Username, username, StringComparison.OrdinalIgnoreCase));
         }
 
         public int GetUserId(string jwt, string secret)

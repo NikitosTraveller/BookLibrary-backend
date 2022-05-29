@@ -14,7 +14,7 @@ namespace BookLibrary.DAL.DataWorkers
 
         public Repository(DbContext context)
         {
-            this._entities = (DbSet<T>)context.Set<T>();
+            this._entities = context.Set<T>();
             _dbContext = context;
         }
 

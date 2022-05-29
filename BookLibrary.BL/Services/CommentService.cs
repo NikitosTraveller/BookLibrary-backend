@@ -33,7 +33,7 @@ namespace BookLibrary.Services
 
         public async Task DeleteCommentAsync(int commentId)
         {
-            var comment = await _commentFinder.GetByIdAsync(commentId);
+            var comment = _commentFinder.GetById(commentId);
 
             if(comment != null)
             {
@@ -45,13 +45,12 @@ namespace BookLibrary.Services
 
         public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return await _commentFinder.GetListAsync(_ => _.BookId == bookId,
-                includes: _ => _.Include(c => c.User));
+            return await _commentFinder.Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
         }
 
-        public async Task<Comment> PostCommentAsync(Comment comment, int userId)
+        public async Task<Comment?> PostCommentAsync(Comment comment, int userId)
         {
-            var book = await _bookFinder.GetByIdAsync(comment.BookId);
+            var book = _bookFinder.GetById(comment.BookId);
 
             if(book != null)
             {
@@ -59,7 +58,7 @@ namespace BookLibrary.Services
                 _commentRepository.Create(comment);
                 comment.UserId = userId;
                 int commentId = await _unitOfWork.Commit();
-                return await _commentFinder.GetFirstOrDefaultAsync(_ => _.Id == commentId, includes: _ => _.Include(c => c.User));
+                return _commentFinder.Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == commentId);
             }
 
             return null;

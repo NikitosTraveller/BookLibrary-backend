@@ -9,9 +9,9 @@ namespace BookLibrary.BL.Contracts
 {
     public interface IBookService
     {
-        Task<Book> UploadBookAsync(Book book, string path, int userid);
+        Task<Book?> UploadBookAsync(Book book, string path, int userid);
 
-        Task<Book> GetBookAsync(int bookId);
+        Book? GetBook(int bookId);
 
         Task DeleteBookAsync(int bookId);
 

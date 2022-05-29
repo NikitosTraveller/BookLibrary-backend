@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,10 @@ namespace BookLibrary.DAL
 {
     public interface IFinder<T> where T : class
     {
-        public Task<T> GetByIdAsync(int id);
+        public T? GetById(int id);
 
-        public Task<IEnumerable<T>> GetListAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
+        public DbSet<T> Entities { get; }
 
-        public Task<T> GetFirstOrDefaultAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
+        public Task<IEnumerable<T>> GetListAsync();
     }
 }

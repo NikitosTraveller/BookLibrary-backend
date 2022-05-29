@@ -27,7 +27,7 @@ namespace BookLibrary.Services
 
         public async Task DeleteBookAsync(int bookId)
         {
-            var book = await _bookFinder.GetByIdAsync(bookId);
+            var book = _bookFinder.GetById(bookId);
             if (book != null)
             {
                 _bookRepository.Delete(book);
@@ -37,16 +37,15 @@ namespace BookLibrary.Services
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _bookFinder.GetListAsync(null,
-                includes: _ => _.Include(c => c.Comments).Include(c => c.User));
+            return await _bookFinder.Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
         }
 
-        public async Task<Book> GetBookAsync(int bookId)
+        public Book? GetBook(int bookId)
         {
-            return await _bookFinder.GetByIdAsync(bookId);
+            return _bookFinder.GetById(bookId);
         }
 
-        public async Task<Book> UploadBookAsync(Book book, string uploadPath, int userId)
+        public async Task<Book?> UploadBookAsync(Book book, string uploadPath, int userId)
         {
             if (book.FormFile != null && book.FormFile.Length > 0)
             {
@@ -60,7 +59,7 @@ namespace BookLibrary.Services
                 book.UserId = userId;
                 _bookRepository.Create(book);
                 int bookId = await _unitOfWork.Commit();
-                return await _bookFinder.GetFirstOrDefaultAsync(_ => _.Id == bookId, includes: _ => _.Include(c => c.User));
+                return _bookFinder.Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == bookId);
             }
 
             return null;
