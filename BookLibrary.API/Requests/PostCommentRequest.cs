@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookLibrary.ViewModels
+namespace BookLibrary.API.Requests
 {
-    public class CommentModel
+    public class PostCommentRequest
     {
         public string Message { get; set; }
 

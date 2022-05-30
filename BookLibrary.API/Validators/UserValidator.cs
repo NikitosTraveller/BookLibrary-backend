@@ -1,4 +1,4 @@
-﻿using BookLibrary.ViewModels;
+﻿using BookLibrary.API.Requests;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.Validators
 {
-    public class UserValidator : AbstractValidator<UserViewModel>
+    public class UserValidator : AbstractValidator<RegisterUserRequest>
     {
 		public UserValidator()
 		{

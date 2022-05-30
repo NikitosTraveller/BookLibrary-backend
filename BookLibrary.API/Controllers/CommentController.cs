@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using BookLibrary.API.Requests;
+using BookLibrary.API.Responses;
 using BookLibrary.BL.Contracts;
 using BookLibrary.Models;
-using BookLibrary.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -32,11 +33,11 @@ namespace BookLibrary.Controllers
         public async Task<IActionResult> GetAllCommentsForBook(int bookId)
         {
             var comments = await _commentService.GetCommentsForBookAsync(bookId);
-            return Ok(_mapper.Map<IEnumerable<CommentViewModel>>(comments));
+            return Ok(_mapper.Map<IEnumerable<CommentResponse>>(comments));
         }
 
         [HttpPost("post")]
-        public async Task<IActionResult> PostComment(CommentModel commentViewModel)
+        public async Task<IActionResult> PostComment(PostCommentRequest commentViewModel)
         {
             if(!ModelState.IsValid)
             {
@@ -47,7 +48,7 @@ namespace BookLibrary.Controllers
 
             var comment = _mapper.Map<Comment>(commentViewModel);
             var postedComment = await _commentService.PostCommentAsync(comment, userId);
-            return Ok(_mapper.Map<CommentViewModel>(postedComment));
+            return Ok(_mapper.Map<CommentResponse>(postedComment));
         }
 
         [HttpDelete("delete/{commentId}")]

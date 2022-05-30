@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using BookLibrary.API.Requests;
+using BookLibrary.API.Responses;
 using BookLibrary.BL.Contracts;
 using BookLibrary.Models;
-using BookLibrary.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -30,7 +31,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadBook([FromForm] FileModel fileModel)
+        public async Task<IActionResult> UploadBook([FromForm] UploadBookRequest fileModel)
         {
 
             if (!ModelState.IsValid)
@@ -42,14 +43,14 @@ namespace BookLibrary.Controllers
 
             var book = _mapper.Map<Book>(fileModel);
             var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
-            return Ok(_mapper.Map<BookViewModel>(uploadedBook));
+            return Ok(_mapper.Map<BookResponse>(uploadedBook));
         }
 
         [HttpGet("books")]
         public async Task<IActionResult> GetAllBooks()
         {
             var books = await _bookService.GetAllBooksAsync();
-            return Ok(_mapper.Map<IEnumerable<BookViewModel>>(books));
+            return Ok(_mapper.Map<IEnumerable<BookResponse>>(books));
         }
 
         [HttpGet("books/{bookId}")]
@@ -62,7 +63,7 @@ namespace BookLibrary.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<BookViewModel>(book));
+            return Ok(_mapper.Map<BookResponse>(book));
         }
 
         [HttpPost("download/{bookId}")]

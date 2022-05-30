@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using BookLibrary.API.Requests;
 using BookLibrary.BL.Contracts;
 using BookLibrary.Helpers;
 using BookLibrary.Models;
-using BookLibrary.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -46,7 +46,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Registrate(UserViewModel userViewModel)
+        public async Task<IActionResult> Registrate(RegisterUserRequest userViewModel)
         {
 
             if(!ModelState.IsValid)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookLibrary.ViewModels
+namespace BookLibrary.API.Responses
 {
-    public class CommentViewModel
+    public class CommentResponse
     {
         public int Id { get; set; }
 

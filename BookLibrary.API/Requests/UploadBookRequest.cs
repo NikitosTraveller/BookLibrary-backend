@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookLibrary.ViewModels
+namespace BookLibrary.API.Requests
 {
-    public class FileModel
+    public class UploadBookRequest
     {
         public string FileName { get; set; }
 
