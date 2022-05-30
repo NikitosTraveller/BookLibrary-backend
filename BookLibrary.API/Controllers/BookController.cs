@@ -38,7 +38,7 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = 1; // _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
+            int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
             var book = _mapper.Map<Book>(fileModel);
             var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
