@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookLibrary.API;
 using BookLibrary.API.Requests;
 using BookLibrary.BL.Contracts;
 using BookLibrary.Helpers;

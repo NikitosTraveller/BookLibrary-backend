@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookLibrary.Models
+namespace BookLibrary.API
 {
     public class AppSettings
     {
