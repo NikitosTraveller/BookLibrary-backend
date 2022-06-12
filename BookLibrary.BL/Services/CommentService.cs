@@ -58,7 +58,7 @@ namespace BookLibrary.Services
                 _commentRepository.Create(comment);
                 comment.UserId = userId;
                 await _unitOfWork.Commit();
-                return _commentFinder.Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == comment.Id);
+                return _commentFinder.GetPostedComment(comment.Id);
             }
 
             return null;

@@ -21,5 +21,10 @@ namespace BookLibrary.DAL.DataHelpers
         {
             return await Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
         }
+
+        public Book? GetUploadedBook(int bookId)
+        {
+            return Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == bookId);
+        }
     }
 }

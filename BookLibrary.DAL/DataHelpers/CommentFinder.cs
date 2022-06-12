@@ -20,5 +20,10 @@ namespace BookLibrary.DAL.DataHelpers
         {
             return await Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
         }
+
+        public Comment? GetPostedComment(int commentId)
+        {
+            return Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == commentId);
+        }
     }
 }

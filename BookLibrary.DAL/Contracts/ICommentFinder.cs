@@ -10,5 +10,7 @@ namespace BookLibrary.DAL.Contracts
     public interface ICommentFinder : IFinder<Comment>
     {
         Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId);
+
+        Comment? GetPostedComment(int commentId);
     }
 }
