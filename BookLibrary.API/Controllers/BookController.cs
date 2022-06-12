@@ -32,7 +32,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadBook([FromForm] UploadBookRequest fileModel)
+        public async Task<IActionResult> UploadBook([FromForm] UploadBookRequest uploadBookRequest)
         {
 
             if (!ModelState.IsValid)
@@ -42,7 +42,7 @@ namespace BookLibrary.Controllers
 
             int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
-            var book = _mapper.Map<Book>(fileModel);
+            var book = _mapper.Map<Book>(uploadBookRequest);
             var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
             return Ok(_mapper.Map<BookResponse>(uploadedBook));
         }

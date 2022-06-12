@@ -47,7 +47,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Registrate(RegisterUserRequest userViewModel)
+        public async Task<IActionResult> Registrate(RegisterUserRequest registerUserRequest)
         {
 
             if(!ModelState.IsValid)
@@ -55,7 +55,7 @@ namespace BookLibrary.Controllers
                 return BadRequest(new { message = "Model state is invalid." });
             }
 
-            var result = await _userService.CreateUserAsync(_mapper.Map<User>(userViewModel));
+            var result = await _userService.CreateUserAsync(_mapper.Map<User>(registerUserRequest));
 
             if(result == null)
             {

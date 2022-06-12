@@ -38,7 +38,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("post")]
-        public async Task<IActionResult> PostComment(PostCommentRequest commentViewModel)
+        public async Task<IActionResult> PostComment(PostCommentRequest postCommentRequest)
         {
             if(!ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace BookLibrary.Controllers
 
             int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
 
-            var comment = _mapper.Map<Comment>(commentViewModel);
+            var comment = _mapper.Map<Comment>(postCommentRequest);
             var postedComment = await _commentService.PostCommentAsync(comment, userId);
             return Ok(_mapper.Map<CommentResponse>(postedComment));
         }
