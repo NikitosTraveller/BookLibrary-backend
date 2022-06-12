@@ -12,9 +12,5 @@ namespace BookLibrary.DAL
     public interface IFinder<T> where T : class
     {
         public T? GetById(int id);
-
-        public DbSet<T> Entities { get; }
-
-        public Task<IEnumerable<T>> GetListAsync();
     }
 }

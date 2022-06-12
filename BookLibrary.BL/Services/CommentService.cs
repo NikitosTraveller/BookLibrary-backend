@@ -16,13 +16,13 @@ namespace BookLibrary.Services
 
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IFinder<Comment> _commentFinder;
+        private readonly ICommentFinder _commentFinder;
 
-        private readonly IFinder<Book> _bookFinder;
+        private readonly IBookFinder _bookFinder;
 
         private readonly IRepository<Comment> _commentRepository;
 
-        public CommentService(IBookService bookService, IUnitOfWork unitOfWork, IFinder<Comment> commentFinder, IFinder<Book> bookFinder, IRepository<Comment> commentRepository)
+        public CommentService(IBookService bookService, IUnitOfWork unitOfWork, ICommentFinder commentFinder, IBookFinder bookFinder, IRepository<Comment> commentRepository)
         {
             _bookService = bookService;
             _unitOfWork = unitOfWork;
@@ -45,7 +45,7 @@ namespace BookLibrary.Services
 
         public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return await _commentFinder.Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
+            return await _commentFinder.GetCommentsForBookAsync(bookId);
         }
 
         public async Task<Comment?> PostCommentAsync(Comment comment, int userId)

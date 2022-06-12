@@ -14,11 +14,11 @@ namespace BookLibrary.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IFinder<Book> _bookFinder;
+        private readonly IBookFinder _bookFinder;
 
         private readonly IRepository<Book> _bookRepository;
 
-        public BookService(IUnitOfWork unitOfWork, IFinder<Book> bookFinder, IRepository<Book> bookRepository)
+        public BookService(IUnitOfWork unitOfWork, IBookFinder bookFinder, IRepository<Book> bookRepository)
         {
             _unitOfWork = unitOfWork;
             _bookFinder = bookFinder;
@@ -37,7 +37,7 @@ namespace BookLibrary.Services
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _bookFinder.Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
+            return await _bookFinder.GetAllBooksAsync();
         }
 
         public Book? GetBook(int bookId)

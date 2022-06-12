@@ -19,11 +19,11 @@ namespace BookLibrary.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IFinder<User> _userFinder;
+        private readonly IUserFinder _userFinder;
 
         private readonly IRepository<User> _userRepository;
 
-        public UserService(IUnitOfWork unitOfWork, IFinder<User> userFinder, IRepository<User> userRepository)
+        public UserService(IUnitOfWork unitOfWork, IUserFinder userFinder, IRepository<User> userRepository)
         {
             _unitOfWork = unitOfWork;
             _userFinder = userFinder;
@@ -49,7 +49,7 @@ namespace BookLibrary.Services
 
         public User? GetByUsername(string username)
         {
-            return _userFinder.Entities.FirstOrDefault(_ => string.Equals(_.Username, username, StringComparison.OrdinalIgnoreCase));
+            return _userFinder.GetByUsername(username);
         }
 
         public int GetUserId(string jwt, string secret)
