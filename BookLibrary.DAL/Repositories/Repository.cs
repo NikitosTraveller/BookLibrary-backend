@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL.DataWorkers
+namespace BookLibrary.DAL.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL
+namespace BookLibrary.DAL.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork
     {

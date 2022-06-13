@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL.DataHelpers
+namespace BookLibrary.DAL.Finders
 {
     public class Finder<T> : IFinder<T> where T : class
     {
@@ -15,7 +15,7 @@ namespace BookLibrary.DAL.DataHelpers
 
         public Finder(DbContext context)
         {
-            this._entities = context.Set<T>();
+            _entities = context.Set<T>();
         }
 
         protected DbSet<T> Entities

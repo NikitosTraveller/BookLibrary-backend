@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using BookLibrary.API.Mapping;
 using FluentValidation.AspNetCore;
 using BookLibrary.DAL;
-using BookLibrary.DAL.DataWorkers;
-using BookLibrary.BL;
-using Autofac;
 using BookLibrary.DAL.Contracts;
 using BookLibrary.API;
-using BookLibrary.DAL.DataHelpers;
+using BookLibrary.DAL.Finders;
+using BookLibrary.DAL.Repositories;
+using BookLibrary.DAL.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 

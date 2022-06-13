@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL.DataHelpers
+namespace BookLibrary.DAL.Finders
 {
     public class CommentFinder : Finder<Comment>, ICommentFinder
     {
-        public CommentFinder(DbContext context) : base(context)
+        public CommentFinder(ApplicationContext context) : base(context)
         {
 
         }

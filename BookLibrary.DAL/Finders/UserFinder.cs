@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary.DAL.DataHelpers
+namespace BookLibrary.DAL.Finders
 {
     public class UserFinder : Finder<User>, IUserFinder
     {
-        public UserFinder(DbContext context) : base(context)
+        public UserFinder(ApplicationContext context) : base(context)
         {
 
         }
