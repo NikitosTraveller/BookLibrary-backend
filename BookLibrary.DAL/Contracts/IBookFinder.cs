@@ -11,6 +11,6 @@ namespace BookLibrary.DAL.Contracts
     {
         Task<List<Book>> GetAllBooksAsync();
 
-        Book? GetUploadedBook(int bookId);
+        Task<Book?> GetUploadedBookAsync(int bookId);
     }
 }

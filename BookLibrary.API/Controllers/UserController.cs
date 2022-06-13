@@ -27,10 +27,10 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(AuthenticateRequest model)
+        public async Task<IActionResult> Login(AuthenticateRequest model)
         {
 
-            var user = _userService.GetByUsername(model.Username);
+            var user = await _userService.GetByUsernameAsync(model.Username);
 
             if(user == null || !_userService.ValidatePassword(user.Password, model.Password))
             {

@@ -21,9 +21,9 @@ namespace BookLibrary.DAL.Finders
             return Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
         }
 
-        public Book? GetUploadedBook(int bookId)
+        public Task<Book?> GetUploadedBookAsync(int bookId)
         {
-            return Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == bookId);
+            return Entities.Include(c => c.User).FirstOrDefaultAsync(book => book.Id == bookId);
         }
     }
 }

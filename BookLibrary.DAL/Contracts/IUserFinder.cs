@@ -9,6 +9,6 @@ namespace BookLibrary.DAL.Contracts
 {
     public interface IUserFinder : IFinder<User>
     {
-        User? GetByUsername(string username);
+        Task<User?> GetByUsernameAsync(string username);
     }
 }

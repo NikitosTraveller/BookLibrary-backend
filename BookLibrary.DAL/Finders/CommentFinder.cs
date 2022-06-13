@@ -18,12 +18,12 @@ namespace BookLibrary.DAL.Finders
 
         public Task<List<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
+            return Entities.Where(book => book.BookId == bookId).Include(c => c.User).ToListAsync();
         }
 
-        public Comment? GetPostedComment(int commentId)
+        public Task<Comment?> GetPostedCommentAsync(int commentId)
         {
-            return Entities.Include(c => c.User).FirstOrDefault(_ => _.Id == commentId);
+            return Entities.Include(c => c.User).FirstOrDefaultAsync(comm => comm.Id == commentId);
         }
     }
 }

@@ -11,6 +11,6 @@ namespace BookLibrary.DAL.Contracts
     {
         Task<List<Comment>> GetCommentsForBookAsync(int bookId);
 
-        Comment? GetPostedComment(int commentId);
+        Task<Comment?> GetPostedCommentAsync(int commentId);
     }
 }

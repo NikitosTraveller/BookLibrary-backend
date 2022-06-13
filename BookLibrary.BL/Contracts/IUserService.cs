@@ -11,7 +11,7 @@ namespace BookLibrary.BL.Contracts
     {
         Task<User> CreateUserAsync(User user);
 
-        User? GetByUsername(string username);
+        Task<User?> GetByUsernameAsync(string username);
 
         User? GetById(int userId);
 

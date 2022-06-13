@@ -32,7 +32,7 @@ namespace BookLibrary.Services
 
         public async Task<User> CreateUserAsync(User user)
         {
-            var nonUnique = GetByUsername(user.Username);
+            var nonUnique = GetByUsernameAsync(user.Username);
             if(nonUnique == null)
             {
                 _userRepository.Create(user);
@@ -47,9 +47,9 @@ namespace BookLibrary.Services
             return _userFinder.GetById(userId);
         }
 
-        public User? GetByUsername(string username)
+        public Task<User?> GetByUsernameAsync(string username)
         {
-            return _userFinder.GetByUsername(username);
+            return _userFinder.GetByUsernameAsync(username);
         }
 
         public int GetUserId(string jwt, string secret)

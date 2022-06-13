@@ -16,9 +16,9 @@ namespace BookLibrary.DAL.Finders
 
         }
 
-        public User? GetByUsername(string username)
+        public Task<User?> GetByUsernameAsync(string username)
         {
-            return Entities.FirstOrDefault(_ => string.Equals(_.Username, username, StringComparison.OrdinalIgnoreCase));
+            return Entities.FirstOrDefaultAsync(user => string.Equals(user.Username, username, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
