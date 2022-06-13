@@ -1,4 +1,4 @@
-namespace BookLibrary.API.Tests
+namespace BookLibrary.Tests
 {
     public class Tests
     {
