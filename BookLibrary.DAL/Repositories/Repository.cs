@@ -27,5 +27,10 @@ namespace BookLibrary.DAL.Repositories
         {
             _entities.Remove(entity);
         }
+
+        public void Save(T entity)
+        {
+            
+        }
     }
 }

@@ -17,9 +17,9 @@ namespace BookLibrary.DAL.UnitOfWorks
             this.context = context;
         }
 
-        public async Task<int> Commit()
+        public Task<int> Commit()
         {
-            return await context.SaveChangesAsync();
+            return context.SaveChangesAsync();
         }
     }
 }
