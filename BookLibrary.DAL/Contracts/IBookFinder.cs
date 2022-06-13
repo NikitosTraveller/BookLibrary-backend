@@ -9,7 +9,7 @@ namespace BookLibrary.DAL.Contracts
 {
     public interface IBookFinder: IFinder<Book>
     {
-        Task<IEnumerable<Book>> GetAllBooksAsync();
+        Task<List<Book>> GetAllBooksAsync();
 
         Book? GetUploadedBook(int bookId);
     }

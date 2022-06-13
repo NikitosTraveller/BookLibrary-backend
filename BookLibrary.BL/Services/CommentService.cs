@@ -43,9 +43,9 @@ namespace BookLibrary.Services
             }
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
+        public Task<List<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return await _commentFinder.GetCommentsForBookAsync(bookId);
+            return _commentFinder.GetCommentsForBookAsync(bookId);
         }
 
         public async Task<Comment?> PostCommentAsync(Comment comment, int userId)

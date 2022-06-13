@@ -16,9 +16,9 @@ namespace BookLibrary.DAL.Finders
 
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsForBookAsync(int bookId)
+        public Task<List<Comment>> GetCommentsForBookAsync(int bookId)
         {
-            return await Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
+            return Entities.Where(_ => _.BookId == bookId).Include(c => c.User).ToListAsync();
         }
 
         public Comment? GetPostedComment(int commentId)

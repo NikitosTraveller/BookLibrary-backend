@@ -17,6 +17,6 @@ namespace BookLibrary.BL.Contracts
 
         Task DeleteBookAsync(int bookId);
 
-        Task<IEnumerable<Book>> GetAllBooksAsync();
+        Task<List<Book>> GetAllBooksAsync();
     }
 }

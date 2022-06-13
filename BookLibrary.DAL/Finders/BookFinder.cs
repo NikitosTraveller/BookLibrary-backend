@@ -16,9 +16,9 @@ namespace BookLibrary.DAL.Finders
 
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        public Task<List<Book>> GetAllBooksAsync()
         {
-            return await Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
+            return Entities.Include(c => c.Comments).Include(c => c.User).ToListAsync();
         }
 
         public Book? GetUploadedBook(int bookId)

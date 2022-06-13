@@ -35,9 +35,9 @@ namespace BookLibrary.Services
             }
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        public Task<List<Book>> GetAllBooksAsync()
         {
-            return await _bookFinder.GetAllBooksAsync();
+            return _bookFinder.GetAllBooksAsync();
         }
 
         public Book? GetBook(int bookId)
