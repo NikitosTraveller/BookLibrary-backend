@@ -55,11 +55,11 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet("books/{bookId}")]
-        public IActionResult GetBook(int bookId)
+        public async Task<IActionResult> GetBook(int bookId)
         {
-            var book = _bookService.GetBook(bookId);
+            var book = await _bookService.GetBookAsync(bookId);
 
-            if(book == null)
+            if (book == null)
             {
                 return NotFound();
             }
@@ -68,9 +68,9 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost("download/{bookId}")]
-        public IActionResult DownloadBook(int bookId)
+        public async Task<IActionResult> DownloadBook(int bookId)
         {
-            var book = _bookService.GetBook(bookId);
+            var book = await _bookService.GetBookAsync(bookId);
 
             if(book == null)
             {

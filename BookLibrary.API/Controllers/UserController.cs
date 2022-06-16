@@ -66,7 +66,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult GetUser()
+        public async Task<IActionResult> GetUser()
         {
             try
             {
@@ -76,7 +76,7 @@ namespace BookLibrary.Controllers
 
                 int userId = int.Parse(validatedToken.Issuer);
 
-                var user = _userService.GetById(userId);
+                var user = await _userService.GetByIdAsync(userId);
 
                 return Ok(user);
             }

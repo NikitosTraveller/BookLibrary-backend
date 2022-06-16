@@ -16,6 +16,11 @@ namespace BookLibrary.DAL.Finders
 
         }
 
+        public Task<Comment?> GetByIdAsync(int id)
+        {
+            return Entities.FirstOrDefaultAsync(comment => comment.Id == id);
+        }
+
         public Task<List<Comment>> GetCommentsForBookAsync(int bookId)
         {
             return Entities.Where(book => book.BookId == bookId).Include(c => c.User).ToListAsync();

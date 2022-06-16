@@ -37,7 +37,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddFluentValidation();
 
-builder.Services.AddScoped(typeof(IFinder<>), typeof(Finder<>));
 builder.Services.AddScoped<IBookFinder, BookFinder>();
 builder.Services.AddScoped<IUserFinder, UserFinder>();
 builder.Services.AddScoped<ICommentFinder, CommentFinder>();

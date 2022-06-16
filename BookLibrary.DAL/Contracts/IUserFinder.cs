@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DAL.Contracts
 {
-    public interface IUserFinder : IFinder<User>
+    public interface IUserFinder
     {
         Task<User?> GetByUsernameAsync(string username);
+
+        Task<User?> GetByIdAsync(int id);
     }
 }

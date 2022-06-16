@@ -2,11 +2,6 @@
 using BookLibrary.DAL;
 using BookLibrary.DAL.Contracts;
 using BookLibrary.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace BookLibrary.Services
 {
@@ -27,7 +22,7 @@ namespace BookLibrary.Services
 
         public async Task DeleteBookAsync(int bookId)
         {
-            var book = _bookFinder.GetById(bookId);
+            var book = await _bookFinder.GetByIdAsync(bookId);
             if (book != null)
             {
                 _bookRepository.Delete(book);
@@ -40,9 +35,9 @@ namespace BookLibrary.Services
             return _bookFinder.GetAllBooksAsync();
         }
 
-        public Book? GetBook(int bookId)
+        public Task<Book?> GetBookAsync(int bookId)
         {
-            return _bookFinder.GetById(bookId);
+            return _bookFinder.GetByIdAsync(bookId);
         }
 
         public byte[] GetBookContent(string name, string uploadPath)

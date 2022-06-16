@@ -2,11 +2,6 @@
 using BookLibrary.DAL;
 using BookLibrary.DAL.Contracts;
 using BookLibrary.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookLibrary.Services
 {
@@ -33,7 +28,7 @@ namespace BookLibrary.Services
 
         public async Task DeleteCommentAsync(int commentId)
         {
-            var comment = _commentFinder.GetById(commentId);
+            var comment = await _commentFinder.GetByIdAsync(commentId);
 
             if(comment != null)
             {
@@ -50,11 +45,11 @@ namespace BookLibrary.Services
 
         public async Task<Comment?> PostCommentAsync(Comment comment, int userId)
         {
-            var book = _bookFinder.GetById(comment.BookId);
+            var book = _bookFinder.GetByIdAsync(comment.BookId);
 
             if(book != null)
             {
-                comment.Book = book;
+                comment.Book = book.Result;
                 _commentRepository.Create(comment);
                 comment.UserId = userId;
                 await _unitOfWork.Commit();

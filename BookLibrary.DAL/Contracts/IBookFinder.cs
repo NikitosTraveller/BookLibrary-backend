@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DAL.Contracts
 {
-    public interface IBookFinder: IFinder<Book>
+    public interface IBookFinder
     {
         Task<List<Book>> GetAllBooksAsync();
 
         Task<Book?> GetUploadedBookAsync(int bookId);
+
+        Task<Book?> GetByIdAsync(int id);
     }
 }

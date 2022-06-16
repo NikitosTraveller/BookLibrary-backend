@@ -13,7 +13,7 @@ namespace BookLibrary.BL.Contracts
 
         Task<User?> GetByUsernameAsync(string username);
 
-        User? GetById(int userId);
+        Task<User?> GetByIdAsync(int userId);
 
         int GetUserId(string jwt, string secret);
 

@@ -11,7 +11,7 @@ namespace BookLibrary.BL.Contracts
     {
         Task<Book?> UploadBookAsync(Book book, string path, int userid);
 
-        Book? GetBook(int bookId);
+        Task<Book?> GetBookAsync(int bookId);
 
         byte[] GetBookContent(string name, string uploadPath);
 

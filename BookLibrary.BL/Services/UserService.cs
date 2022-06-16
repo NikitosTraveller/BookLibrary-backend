@@ -3,15 +3,6 @@ using BookLibrary.DAL;
 using BookLibrary.DAL.Contracts;
 using BookLibrary.Helpers;
 using BookLibrary.Models;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookLibrary.Services
 {
@@ -42,9 +33,9 @@ namespace BookLibrary.Services
             return null;
         }
 
-        public User? GetById(int userId)
+        public Task<User?> GetByIdAsync(int userId)
         {
-            return _userFinder.GetById(userId);
+            return _userFinder.GetByIdAsync(userId);
         }
 
         public Task<User?> GetByUsernameAsync(string username)

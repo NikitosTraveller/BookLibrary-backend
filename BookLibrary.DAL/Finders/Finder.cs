@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DAL.Finders
 {
-    public class Finder<T> : IFinder<T> where T : class
+    public class Finder<T> where T : class
     {
         private readonly DbSet<T> _entities;
 
@@ -21,11 +21,6 @@ namespace BookLibrary.DAL.Finders
         protected DbSet<T> Entities
         {
             get { return _entities; }
-        }
-
-        public T? GetById(int id)
-        {
-            return _entities.Find(id);
         }
     }
 }
