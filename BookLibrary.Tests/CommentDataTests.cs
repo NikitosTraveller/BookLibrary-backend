@@ -6,10 +6,11 @@ namespace BookLibrary.Tests
 {
     public class CommentDataTests : Tests
     {
+        private readonly CommentFinder _commentFinder;
 
         public CommentDataTests()
         {
-
+            _commentFinder = new CommentFinder(Context);
         }
 
         [SetUp]
@@ -20,9 +21,8 @@ namespace BookLibrary.Tests
         [Test]
         public async Task Test1()
         {
-            var finder = new BookFinder(Context);
-            var books = await finder.GetAllBooksAsync();
-            Assert.AreEqual(books.Count, books.Count);
+            //var books = await commentFinder.;
+            Assert.AreEqual(1, 1);
         }
     }
 }

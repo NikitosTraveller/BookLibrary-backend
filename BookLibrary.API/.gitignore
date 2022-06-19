@@ -4,6 +4,8 @@
 # User-specific files
 *.suo
 *.user
+*.manifest
+*.vsidx
 *.userosscache
 *.sln.docstates
 

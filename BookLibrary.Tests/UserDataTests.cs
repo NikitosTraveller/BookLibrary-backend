@@ -6,9 +6,10 @@ namespace BookLibrary.Tests
 {
     public class UserDataTests : Tests
     {
+        private readonly UserFinder _userFinder;
         public UserDataTests()
         {
-
+            _userFinder = new UserFinder(Context);
         }
 
         [SetUp]
@@ -19,9 +20,7 @@ namespace BookLibrary.Tests
         [Test]
         public async Task Test1()
         {
-            var finder = new BookFinder(Context);
-            var books = await finder.GetAllBooksAsync();
-            Assert.AreEqual(books.Count, books.Count);
+            Assert.AreEqual(1, 1);
         }
     }
 }

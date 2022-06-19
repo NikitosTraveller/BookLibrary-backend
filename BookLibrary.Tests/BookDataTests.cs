@@ -7,9 +7,11 @@ namespace BookLibrary.Tests
     public class BookDataTests : Tests
     {
 
+        private readonly BookFinder _bookFinder;
+
         public BookDataTests()
         {
-
+            _bookFinder = new BookFinder(Context);
         }
 
         [SetUp]
@@ -20,8 +22,7 @@ namespace BookLibrary.Tests
         [Test]
         public async Task Test1()
         {
-            var finder = new BookFinder(Context);
-            var books = await finder.GetAllBooksAsync();
+            var books = await _bookFinder.GetAllBooksAsync();
             Assert.AreEqual(books.Count, books.Count);
         }
     }
