@@ -45,11 +45,11 @@ namespace BookLibrary.Services
 
         public async Task<Comment?> PostCommentAsync(Comment comment, int userId)
         {
-            var book = _bookFinder.GetByIdAsync(comment.BookId);
+            var book = await _bookFinder.GetByIdAsync(comment.BookId);
 
             if(book != null)
             {
-                comment.Book = book.Result;
+                comment.Book = book;
                 _commentRepository.Create(comment);
                 comment.UserId = userId;
                 await _unitOfWork.Commit();
