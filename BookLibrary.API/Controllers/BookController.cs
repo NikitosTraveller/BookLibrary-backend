@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookLibrary.API;
+using BookLibrary.API.Controllers;
 using BookLibrary.API.Requests;
 using BookLibrary.API.Responses;
 using BookLibrary.BL.Contracts;
@@ -12,23 +13,18 @@ namespace BookLibrary.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class BookController : ControllerBase
+    public class BookController : BaseController
     {
 
         private readonly IBookService _bookService;
 
-        private readonly IUserService _userService;
-
-        private IMapper _mapper;
-
-        private AppSettings _appSettings;
-
-        public BookController(IBookService bookService, IOptions<AppSettings> appSettings, IMapper mapper, IUserService userService)
+        public BookController(
+            IBookService bookService, 
+            IOptions<AppSettings> appSettings, 
+            IMapper mapper, 
+            IUserService userService) : base(userService, appSettings, mapper)
         {
             _bookService = bookService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
-            _userService = userService;
         }
 
         [HttpPost("upload")]
@@ -40,18 +36,16 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
-
-            var book = _mapper.Map<Book>(uploadBookRequest);
-            var uploadedBook = await _bookService.UploadBookAsync(book, _appSettings.StoragePath, userId);
-            return Ok(_mapper.Map<BookResponse>(uploadedBook));
+            var book = Mapper.Map<Book>(uploadBookRequest);
+            var uploadedBook = await _bookService.UploadBookAsync(book, Settings.StoragePath, UserId);
+            return Ok(Mapper.Map<BookResponse>(uploadedBook));
         }
 
         [HttpGet("books")]
         public async Task<IActionResult> GetAllBooks()
         {
             var books = await _bookService.GetAllBooksAsync();
-            return Ok(_mapper.Map<IEnumerable<BookResponse>>(books));
+            return Ok(Mapper.Map<IEnumerable<BookResponse>>(books));
         }
 
         [HttpGet("books/{bookId}")]
@@ -64,7 +58,7 @@ namespace BookLibrary.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<BookResponse>(book));
+            return Ok(Mapper.Map<BookResponse>(book));
         }
 
         [HttpPost("download/{bookId}")]
@@ -77,7 +71,7 @@ namespace BookLibrary.Controllers
                 return NotFound();
             }
 
-            var content = _bookService.GetBookContent(book.Name, _appSettings.StoragePath);
+            var content = _bookService.GetBookContent(book.Name, Settings.StoragePath);
 
             return new FileContentResult(content, book.ContentType);
         }

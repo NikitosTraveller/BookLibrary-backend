@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookLibrary.API;
+using BookLibrary.API.Controllers;
 using BookLibrary.API.Requests;
 using BookLibrary.API.Responses;
 using BookLibrary.BL.Contracts;
@@ -12,29 +13,24 @@ namespace BookLibrary.Controllers
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class CommentController : BaseController
     {
         private readonly ICommentService _commentService;
 
-        private readonly IUserService _userService;
-
-        private IMapper _mapper;
-
-        private AppSettings _appSettings;
-
-        public CommentController(ICommentService commentService, IOptions<AppSettings> appSettings, IMapper mapper, IUserService userService)
+        public CommentController(
+            ICommentService commentService,
+            IOptions<AppSettings> appSettings, 
+            IMapper mapper, 
+            IUserService userService) : base(userService, appSettings, mapper)
         {
             _commentService = commentService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
-            _userService = userService;
         }
 
         [HttpGet("comments/{bookId}")]
         public async Task<IActionResult> GetAllCommentsForBook(int bookId)
         {
             var comments = await _commentService.GetCommentsForBookAsync(bookId);
-            return Ok(_mapper.Map<IEnumerable<CommentResponse>>(comments));
+            return Ok(Mapper.Map<IEnumerable<CommentResponse>>(comments));
         }
 
         [HttpPost("post")]
@@ -45,11 +41,9 @@ namespace BookLibrary.Controllers
                 return BadRequest();
             }
 
-            int userId = _userService.GetUserId(Request.Cookies["jwt"], _appSettings.Secret);
-
-            var comment = _mapper.Map<Comment>(postCommentRequest);
-            var postedComment = await _commentService.PostCommentAsync(comment, userId);
-            return Ok(_mapper.Map<CommentResponse>(postedComment));
+            var comment = Mapper.Map<Comment>(postCommentRequest);
+            var postedComment = await _commentService.PostCommentAsync(comment, UserId);
+            return Ok(Mapper.Map<CommentResponse>(postedComment));
         }
 
         [HttpDelete("delete/{commentId}")]

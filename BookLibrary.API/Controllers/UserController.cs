@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookLibrary.API;
+using BookLibrary.API.Controllers;
 using BookLibrary.API.Requests;
 using BookLibrary.BL.Contracts;
 using BookLibrary.Helpers;
@@ -11,19 +12,16 @@ namespace BookLibrary.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserService _userService;
 
-        private IMapper _mapper;
-
-        private AppSettings _appSettings;
-
-        public UserController(IUserService userService, IOptions<AppSettings> appSettings, IMapper mapper)
+        public UserController(
+            IUserService userService, 
+            IOptions<AppSettings> appSettings, 
+            IMapper mapper) : base(userService, appSettings, mapper)
         {
             _userService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
         }
 
         [HttpPost("login")]
@@ -37,7 +35,7 @@ namespace BookLibrary.Controllers
                 return BadRequest(new { message = "Invalid credentials" });
             }
 
-            var jwt = JwtHelper.Generate(user.Id, _appSettings.Secret, _appSettings.LifeTime);
+            var jwt = JwtHelper.Generate(user.Id, Settings.Secret, Settings.LifeTime);
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions { 
                 HttpOnly = true
@@ -55,7 +53,7 @@ namespace BookLibrary.Controllers
                 return BadRequest(new { message = "Model state is invalid." });
             }
 
-            var result = await _userService.CreateUserAsync(_mapper.Map<User>(registerUserRequest));
+            var result = await _userService.CreateUserAsync(Mapper.Map<User>(registerUserRequest));
 
             if(result == null)
             {
@@ -72,7 +70,7 @@ namespace BookLibrary.Controllers
             {
                 var jwt = Request.Cookies["jwt"];
 
-                var validatedToken = JwtHelper.Verify(jwt, _appSettings.Secret);
+                var validatedToken = JwtHelper.Verify(jwt, Settings.Secret);
 
                 int userId = int.Parse(validatedToken.Issuer);
 
