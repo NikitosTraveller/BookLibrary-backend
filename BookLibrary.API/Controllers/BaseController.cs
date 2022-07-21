@@ -17,6 +17,12 @@ namespace BookLibrary.API.Controllers
 
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseController"/> class.
+        /// </summary>
+        /// <param name="userService">The user service.</param>
+        /// <param name="appSettings">The application settings.</param>
+        /// <param name="mapper">The mapper.</param>
         public BaseController(IUserService userService, IOptions<AppSettings> appSettings, IMapper mapper)
         {
             _userService = userService;
@@ -24,6 +30,12 @@ namespace BookLibrary.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the user identifier.
+        /// </summary>
+        /// <value>
+        /// The user identifier.
+        /// </value>
         protected int UserId
         {
             get
@@ -32,6 +44,12 @@ namespace BookLibrary.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        /// <value>
+        /// The settings.
+        /// </value>
         protected AppSettings Settings
         {
             get
@@ -40,6 +58,12 @@ namespace BookLibrary.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the mapper.
+        /// </summary>
+        /// <value>
+        /// The mapper.
+        /// </value>
         protected IMapper Mapper
         {
             get

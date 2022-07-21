@@ -18,6 +18,13 @@ namespace BookLibrary.Controllers
 
         private readonly IBookService _bookService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookController"/> class.
+        /// </summary>
+        /// <param name="bookService">The book service.</param>
+        /// <param name="appSettings">The application settings.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="userService">The user service.</param>
         public BookController(
             IBookService bookService, 
             IOptions<AppSettings> appSettings, 
@@ -27,6 +34,11 @@ namespace BookLibrary.Controllers
             _bookService = bookService;
         }
 
+        /// <summary>
+        /// Uploads the book.
+        /// </summary>
+        /// <param name="uploadBookRequest">The upload book request.</param>
+        /// <returns></returns>
         [HttpPost("upload")]
         public async Task<IActionResult> UploadBook([FromForm] UploadBookRequest uploadBookRequest)
         {
@@ -41,6 +53,10 @@ namespace BookLibrary.Controllers
             return Ok(Mapper.Map<BookResponse>(uploadedBook));
         }
 
+        /// <summary>
+        /// Gets all books.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("books")]
         public async Task<IActionResult> GetAllBooks()
         {
@@ -48,6 +64,11 @@ namespace BookLibrary.Controllers
             return Ok(Mapper.Map<IEnumerable<BookResponse>>(books));
         }
 
+        /// <summary>
+        /// Gets the book.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
         [HttpGet("books/{bookId}")]
         public async Task<IActionResult> GetBook(int bookId)
         {
@@ -61,6 +82,11 @@ namespace BookLibrary.Controllers
             return Ok(Mapper.Map<BookResponse>(book));
         }
 
+        /// <summary>
+        /// Downloads the book.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
         [HttpPost("download/{bookId}")]
         public async Task<IActionResult> DownloadBook(int bookId)
         {
@@ -76,6 +102,11 @@ namespace BookLibrary.Controllers
             return new FileContentResult(content, book.ContentType);
         }
 
+        /// <summary>
+        /// Deletes the book.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
         [HttpDelete("delete/{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId)
         {

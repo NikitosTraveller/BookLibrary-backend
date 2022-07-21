@@ -16,6 +16,12 @@ namespace BookLibrary.Controllers
     {
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="userService">The user service.</param>
+        /// <param name="appSettings">The application settings.</param>
+        /// <param name="mapper">The mapper.</param>
         public UserController(
             IUserService userService, 
             IOptions<AppSettings> appSettings, 
@@ -24,6 +30,11 @@ namespace BookLibrary.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Logins the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(AuthenticateRequest model)
         {
@@ -44,6 +55,11 @@ namespace BookLibrary.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Registrates the specified register user request.
+        /// </summary>
+        /// <param name="registerUserRequest">The register user request.</param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Registrate(RegisterUserRequest registerUserRequest)
         {
@@ -63,6 +79,10 @@ namespace BookLibrary.Controllers
             return Created("success", result);
         }
 
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("user")]
         public async Task<IActionResult> GetUser()
         {
@@ -84,6 +104,10 @@ namespace BookLibrary.Controllers
             }
         }
 
+        /// <summary>
+        /// Logouts this instance.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("logout")]
         public IActionResult Logout()
         {

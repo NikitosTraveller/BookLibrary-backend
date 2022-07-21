@@ -7,8 +7,6 @@ namespace BookLibrary.Services
 {
     public class CommentService : ICommentService
     {
-        private readonly IBookService _bookService;
-
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly ICommentFinder _commentFinder;
@@ -17,15 +15,29 @@ namespace BookLibrary.Services
 
         private readonly IRepository<Comment> _commentRepository;
 
-        public CommentService(IBookService bookService, IUnitOfWork unitOfWork, ICommentFinder commentFinder, IBookFinder bookFinder, IRepository<Comment> commentRepository)
+        private readonly ApplicationContext _context;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommentService"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="commentFinder">The comment finder.</param>
+        /// <param name="bookFinder">The book finder.</param>
+        /// <param name="commentRepository">The comment repository.</param>
+        /// <param name="context">The context.</param>
+        public CommentService(IUnitOfWork unitOfWork, ICommentFinder commentFinder, IBookFinder bookFinder, IRepository<Comment> commentRepository, ApplicationContext context)
         {
-            _bookService = bookService;
             _unitOfWork = unitOfWork;
             _commentFinder = commentFinder;
             _bookFinder = bookFinder;
             _commentRepository = commentRepository;
+            _context = context;
         }
 
+        /// <summary>
+        /// Deletes the comment asynchronous.
+        /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
         public async Task DeleteCommentAsync(int commentId)
         {
             var comment = await _commentFinder.GetByIdAsync(commentId);
@@ -38,11 +50,22 @@ namespace BookLibrary.Services
             }
         }
 
+        /// <summary>
+        /// Gets the comments for book asynchronous.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
         public Task<List<Comment>> GetCommentsForBookAsync(int bookId)
         {
             return _commentFinder.GetCommentsForBookAsync(bookId);
         }
 
+        /// <summary>
+        /// Posts the comment asynchronous.
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
         public async Task<Comment?> PostCommentAsync(Comment comment, int userId)
         {
             var book = await _bookFinder.GetByIdAsync(comment.BookId);
@@ -57,6 +80,19 @@ namespace BookLibrary.Services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Updates the comment asynchronous.
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public async Task<Comment?> UpdateCommentAsync(Comment comment, int userId)
+        {
+            _context.Attach(comment);
+            _context.Entry(comment).State = true;
+            await _unitOfWork.Commit();
         }
     }
 }

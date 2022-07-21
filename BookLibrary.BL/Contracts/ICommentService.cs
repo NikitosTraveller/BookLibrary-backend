@@ -14,5 +14,7 @@ namespace BookLibrary.BL.Contracts
         Task DeleteCommentAsync(int commentId);
 
         Task<Comment?> PostCommentAsync(Comment comment, int userId);
+
+        Task<Comment?> UpdateCommentAsync(Comment comment, int userId);
     }
 }
