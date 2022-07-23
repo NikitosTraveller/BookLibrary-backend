@@ -1,3 +1,5 @@
+using BookLibrary.DAL;
+using BookLibrary.DAL.Contracts;
 using BookLibrary.DAL.Finders;
 using BookLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +9,13 @@ namespace BookLibrary.Tests
     public class UserDataTests : Tests
     {
         private readonly UserFinder _userFinder;
-        public UserDataTests()
+
+        private readonly IRepository<User> _userRepository;
+
+        public UserDataTests(IUnitOfWork unitOfWork, IRepository<User> userRepository) : base(unitOfWork)
         {
             _userFinder = new UserFinder(Context);
+            _userRepository = userRepository;
         }
 
         [SetUp]

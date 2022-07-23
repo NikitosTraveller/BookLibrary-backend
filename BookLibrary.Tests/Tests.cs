@@ -1,3 +1,4 @@
+using BookLibrary.DAL.Contracts;
 using BookLibrary.DAL.Finders;
 using BookLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +11,17 @@ namespace BookLibrary.Tests
 
         public readonly ApplicationContext context;
 
-        public Tests()
+        private readonly IUnitOfWork _unitOfWork;
+
+        public Tests(IUnitOfWork unitOfWork)
         {
             dbContextOptions = new DbContextOptionsBuilder<ApplicationContext>()
                 .UseInMemoryDatabase(databaseName: "booklibrarydb")
                 .Options;
 
-            context = new ApplicationContext(dbContextOptions); 
+            context = new ApplicationContext(dbContextOptions);
+
+            _unitOfWork = unitOfWork;
         }
 
         protected ApplicationContext Context
@@ -24,6 +29,14 @@ namespace BookLibrary.Tests
             get
             {
                 return context;
+            }
+        }
+
+        protected IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return _unitOfWork;
             }
         }
     }
